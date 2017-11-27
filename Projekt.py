@@ -41,7 +41,7 @@ def sat_position():
     return data[sat_number:sat_number+3]
 
 def my_position():
-    gmaps = googlemaps.Client(key='AIzaSyAMoiSUofjpepDq4O81Nk7FmqJ2p0bnbM8')
+    gmaps = googlemaps.Client(key='XXXXXXXX')
     x = input('Określić twoje aktualne położenie jako miejsce obserwacji ? [t/n] ')
 
     if x.lower() == 't':
