@@ -8,7 +8,7 @@ Zapisuje w formacie excel położenie x,y,z punktów oraz ich prędkość obroto
 
 ## **Projekt 2**
 
-**Projekt.py**
+**Projekt.py ,key.txt**
 
 Program do określenia parametrów potrzebnych dla rakiety wysłanej z danego punktu na ziemi, aby w danym czasie spotkała wybraną satelitę.
 
