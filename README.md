@@ -1,7 +1,7 @@
 # Mechanika-Nieba
 ## **Projekt 1**
 
-**_Average-earth-speed_**
+**Average_earth_speed.py**
 
 Skrypt oblicza średnią prędkość obrotową ziemi dla n losowych punktów na jej powierzchni.
 Zapisuje w formacie excel położenie x,y,z punktów oraz ich prędkość obrotową.
