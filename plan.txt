@@ -1,4 +1,4 @@
-##Plan projektu
+Plan projektu
 
 29.11.2017 - analiza teoretyczna zagadnienia, część programu 
 06.12.2017 - dalsze rozwinięcie programu, dalsza analiza teoretycznych możliwości rozwiązania
