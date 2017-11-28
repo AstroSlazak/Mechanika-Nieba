@@ -54,7 +54,7 @@ def my_position():
         # Jeżeli dla dowolnego miejsca na podstwaie google
         y = str(input('Dla jakiego miejsca ma zostać wyznaczone położenie ? '))
         g = geocoder.google(y)
-        
+
     # Wyznaczenie długości, szerokości, przewyższenie
     lat = list(g.latlng)[0]
     lon = list(g.latlng)[1]
@@ -114,9 +114,9 @@ y_lat = []
 
 # Wypisanie położenia miejsca obserwacji
 print('\n')
-print('-' * 96)
-print('Miejsce obserwacji: %s | longitude: %5.2f deg | latitude: %5.2f deg | elevation %5.2f m ' % (place, lon, lat, elev))
-print('-' * 96)
+print('-' * 110)
+print('\tMiejsce obserwacji: %s | longitude: %5.2f deg | latitude: %5.2f deg | elevation %5.2f m ' % (place, lon, lat, elev))
+print('-' * 110)
 print('\n')
 
 # Pętla która oblicza położenie satelity w czasie rzeczywistym
@@ -128,7 +128,7 @@ while True:
     # Wypisanie danych
     print(data1 +" | altitude: %5.2f deg | azimuth %5.2f deg | longitude: %5.2f deg | latitude: %5.2f deg" % (math.degrees(sat.alt), math.degrees(sat.az), math.degrees(sat.sublong), math.degrees(sat.sublat)))
     # Konwersja szerokości i długości geograficznej na parametry możliwe do wyświetlenia na mapie
-    x, y = m(math.degrees(sat.sublong),math.degrees(sat.sublat))
+    x, y = m(math.degrees(sat.sublong), math.degrees(sat.sublat))
     # Dodanie parametrów satelity do listy
     x_lon.append(x)
     y_lat.append(y)
