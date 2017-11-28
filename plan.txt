@@ -1,5 +1,7 @@
-29.11.2017 - analiza teoretyczna zagadnienia, czêœæ programu 
-06.12.2017 - dalsze rozwiniêcie programu, dalsza analiza teoretycznych mo¿liwoœci rozwi¹zania
+##Plan projektu
+
+29.11.2017 - analiza teoretyczna zagadnienia, czÄ™Å›Ä‡ programu 
+06.12.2017 - dalsze rozwiniÄ™cie programu, dalsza analiza teoretycznych moÅ¼liwoÅ›ci rozwiÄ…zania
 13.12.2017 - kolejna wersja programu
-20.12.2017 - rozpoczêcie pracy nad raportem, prace nad uporz¹tkowaniem i czytelnoœci¹ programu
+20.12.2017 - rozpoczÄ™cie pracy nad raportem, prace nad uporzÄ…tkowaniem i czytelnoÅ›ciÄ… programu
 03.01.2018 - gotowy program oraz raport 
