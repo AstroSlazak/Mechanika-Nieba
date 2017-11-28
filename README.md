@@ -15,3 +15,9 @@ Program do określenia parametrów potrzebnych dla rakiety wysłanej z danego pu
 **Co potrzeba aby odpalić skrypt ?**
 * Połączenie z internetem
 * Klucz [Google Maps Api](https://developers.google.com/maps/documentation/elevation/start), klucz należy umieścić w pliku key.txt zamiast XXXXXXXXXX
+
+**Zdjęcia programu**
+![ScreenShot](https://i.imgur.com/OM0NLKJ.png)
+
+![ScreenShot](https://i.imgur.com/VoJhtJR.png)
+
