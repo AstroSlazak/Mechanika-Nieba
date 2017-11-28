@@ -54,6 +54,7 @@ def my_position():
         # Jeżeli dla dowolnego miejsca na podstwaie google
         y = str(input('Dla jakiego miejsca ma zostać wyznaczone położenie ? '))
         g = geocoder.google(y)
+        
     # Wyznaczenie długości, szerokości, przewyższenie
     lat = list(g.latlng)[0]
     lon = list(g.latlng)[1]
