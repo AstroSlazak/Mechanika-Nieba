@@ -9,6 +9,9 @@ from datetime import datetime
 from mpl_toolkits.basemap import Basemap
 import matplotlib
 import matplotlib.pyplot as plt
+from orbital import KeplerianElements as KE , earth
+from orbital.utilities import Position, Velocity
+
 
 # Funkcja do pobierania, zapisywania, i przetwarzania danych TLE satelitów
 def sat_position():
@@ -28,7 +31,7 @@ def sat_position():
 
     # Usunięcie znaków nowej lini
     data = [a for a in data if a != '\n']
-    data = ' '.join(data)
+    data = ''.join(data)
     data = data.split('\n')
     # wybranie nazw satelitów
     names = data[0::3]
@@ -63,6 +66,22 @@ def my_position():
     place = g.city
     return lat, lon, elev, place
 
+# Funkcja do zamiany współrzędnych topocentrycznych na geocentryczne
+def top_to_geo(lat, lon, elev=0):
+    # Promień ziemi
+    R = ephem.earth_radius
+    # Współczynnik spłaszczenia ziemi
+    f = 1/298.257223563
+    # Współczynniki do obliczeń
+    F = (1-f)**2
+    C = 1/(math.sqrt(math.cos(lat)**2 + F * math.sin(lat)**2))
+    S = C*F
+    # Obliczenie współrzędnych kartezjańwszystkich
+    x = (R * C + elev)*math.cos(lat) * math.cos(lon)
+    y = (R * C + elev)*math.cos(lat) * math.sin(lon)
+    z = (R * S + elev)*math.sin(lat)
+    return x, y, z
+
 # Wywołanie funkcji pozycji satelity i podział danych
 data = sat_position()
 data1 = " ".join(data[0].split())
@@ -77,12 +96,14 @@ home = ephem.Observer()
 home.lat = lat
 home.lon = lon
 home.elevation = elev
-
+# wyznaczenie położenia geocentrycznego
+h_x, h_y, h_z = top_to_geo(lat,lon,elev)
 # Wprowadzenie danych orbity satelity
 sat = ephem.readtle(data1, data2, data3)
 
 # Określenie wielkości mapy
 matplotlib.rc('figure', figsize = (12, 6))
+
 # Określenie parametrów mapy
 m = Basemap(projection='kav7',
             lon_0 = 0,
@@ -108,39 +129,39 @@ m.plot(h_lon, h_lat,
         color = '#32caf6',
         markersize =6)
 
+# Geocentryczne dane orbity satelity
+sat_orbit = KE.from_tle(data2,data3,earth)
+# x_s ,y_s ,z_s = sat_orbit.r
+# Vx_s ,Vy_s ,Vz_s = sat_orbit.v
+print('-'*100)
+print(sat_orbit)
+print('-'*100)
+
 # Deklaracja list dla szerokości i długości geograficznej satelity
 x_lon = []
 y_lat = []
 
-# Wypisanie położenia miejsca obserwacji
-print('\n')
-print('-' * 110)
-print('\tMiejsce obserwacji: %s | longitude: %5.2f deg | latitude: %5.2f deg | elevation %5.2f m ' % (place, lon, lat, elev))
-print('-' * 110)
-print('\n')
-
+plt.ion()
 # Pętla która oblicza położenie satelity w czasie rzeczywistym
+
 while True:
     # Deklaracja czasu UTC
     home.date = datetime.utcnow()
     # Obliczenia parametrów satelity
     sat.compute(home)
-    # Wypisanie danych
-    print(data1 +" | altitude: %5.2f deg | azimuth %5.2f deg | longitude: %5.2f deg | latitude: %5.2f deg" % (math.degrees(sat.alt), math.degrees(sat.az), math.degrees(sat.sublong), math.degrees(sat.sublat)))
     # Konwersja szerokości i długości geograficznej na parametry możliwe do wyświetlenia na mapie
     x, y = m(math.degrees(sat.sublong), math.degrees(sat.sublat))
     # Dodanie parametrów satelity do listy
     x_lon.append(x)
     y_lat.append(y)
     # Styl przedstawienia satelity na mapie
-    m.plot(x_lon, y_lat, marker='_', markersize=2, color='r', linestyle='None', label=data1)
+    m.plot(x_lon, y_lat, marker='_', markersize=1, color='r', linestyle='None', label=data1)
     # Tytuł wykresu
-    title = plt.title(data1 +' | longitude: %5.2f deg | latitude: %5.2f deg \nObserwator: %s | longitude: %5.2f deg | latitude: %5.2f deg ' % (math.degrees(sat.sublong), math.degrees(sat.sublat), place, lon, lat))
+    title = plt.title( 'Observer: {} | Lon: {} deg | Lat: {} deg | Ele: {} m \n{}: Alt: {} deg | Azi: {} deg  | Lon: {} deg | Lat: {} deg'
+                        .format(place, round(lon,2), round(lat,2), round(elev,2), data1, round(math.degrees(sat.alt),2), round(math.degrees(sat.az),2), round(math.degrees(sat.sublong),2), round(math.degrees(sat.sublat),2)), fontsize = 14)
     # Pozycja tytułu
     title.set_y(1.01)
-    plt.ion()
-    plt.draw()
-    plt.show(block=False)
     # Czasy przerw pomiędzy kolejnymi krokami pętli
-    plt.pause(0.5)
+    plt.draw()
+    plt.pause(0.25)
     time.sleep(1.0)
