@@ -11,7 +11,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from orbital import KeplerianElements as KE , earth
 from orbital.utilities import Position, Velocity
-
+from astropy.time import Time
 
 # Funkcja do pobierania, zapisywania, i przetwarzania danych TLE satelitów
 def sat_position():
@@ -82,6 +82,12 @@ def top_to_geo(lat, lon, elev=0):
     z = (R * S + elev)*math.sin(lat)
     return x, y, z
 
+# Zamiana czasu aktualnego UTC na format JD
+def utc_to_jd():
+    t = datetime.utcnow()
+    data_time = Time(t, scale='utc').jd
+    return data_time
+
 # Wywołanie funkcji pozycji satelity i podział danych
 data = sat_position()
 data1 = " ".join(data[0].split())
@@ -96,8 +102,15 @@ home = ephem.Observer()
 home.lat = lat
 home.lon = lon
 home.elevation = elev
+
 # wyznaczenie położenia geocentrycznego
 h_x, h_y, h_z = top_to_geo(lat,lon,elev)
+
+# wypisanie danych obserwatora
+print('-'*100)
+print('Observer')
+print('Rx: {} | Ry: {} | Rz: {}'.format(h_x, h_y, h_z))
+print('-'*100)
 # Wprowadzenie danych orbity satelity
 sat = ephem.readtle(data1, data2, data3)
 
@@ -128,13 +141,17 @@ m.plot(h_lon, h_lat,
         marker = '.',
         color = '#32caf6',
         markersize =6)
-
+daat = utc_to_jd()
 # Geocentryczne dane orbity satelity
 sat_orbit = KE.from_tle(data2,data3,earth)
-# x_s ,y_s ,z_s = sat_orbit.r
-# Vx_s ,Vy_s ,Vz_s = sat_orbit.v
+Rx_s ,Ry_s ,Rz_s = sat_orbit.r
+Vx_s ,Vy_s ,Vz_s = sat_orbit.v
+# Wypisanie danych orbity
 print('-'*100)
 print(sat_orbit)
+print('\n')
+print('Rx: {} | Ry: {} | Rz: {}'.format(Rx_s ,Ry_s ,Rz_s))
+print('Vx: {} | Vy: {} | Vz: {}'.format(Vx_s ,Vy_s ,Vz_s))
 print('-'*100)
 
 # Deklaracja list dla szerokości i długości geograficznej satelity
