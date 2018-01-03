@@ -87,12 +87,6 @@ def top_to_geo(lat, lon, elev=0):
     z = (R * S + elev)*math.sin(lat)
     return x, y, z
 
-# Zamiana czasu aktualnego UTC na format JD
-def utc_to_jd():
-    t = datetime.utcnow()
-    data_time = Time(t, scale='utc').jd
-    return data_time
-
 # Pozbycie się ostrzeżeń
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -112,14 +106,6 @@ with warnings.catch_warnings():
     home.lon = lon
     home.elevation = elev
 
-    # wyznaczenie położenia geocentrycznego
-    h_x, h_y, h_z = top_to_geo(lat,lon,elev)
-
-    # wypisanie danych obserwatora
-    print('-'*100)
-    print('Observer')
-    print('Rx: {} | Ry: {} | Rz: {}'.format(h_x, h_y, h_z))
-    print('-'*100)
     # Wprowadzenie danych orbity satelity
     sat = ephem.readtle(data1, data2, data3)
 
@@ -127,7 +113,7 @@ with warnings.catch_warnings():
     matplotlib.rc('figure', figsize = (12, 6))
 
     # Określenie parametrów mapy
-    m = Basemap(projection='kav7',
+    m = Basemap(projection='robin',
                 lon_0 = 0,
                 llcrnrlat = -90,
                 llcrnrlon = -180,
@@ -141,6 +127,8 @@ with warnings.catch_warnings():
                     zorder = 30)
     m.fillcontinents(color = '#1e1e1d',
                     lake_color = 'white')
+    # Mapa a'la Google
+    # m.bluemarble()
 
     # Konwersja szerokości i długości geograficznej na parametry możliwe do wyświetlenia na mapie
     h_lon, h_lat = m(lon, lat)
@@ -150,18 +138,23 @@ with warnings.catch_warnings():
             marker = '.',
             color = '#32caf6',
             markersize =6)
-    daat = utc_to_jd()
+
     # Geocentryczne dane orbity satelity
     sat_orbit = KE.from_tle(data2,data3,earth)
-    Rx_s ,Ry_s ,Rz_s = sat_orbit.r
-    Vx_s ,Vy_s ,Vz_s = sat_orbit.v
-    # Wypisanie danych orbity
-    print('-'*100)
-    print(sat_orbit)
+    period = sat_orbit.T
+    mins, secs = divmod(period, 60)
+    hours, mins = divmod(mins, 60)
+    print('*'*100)
     print('\n')
-    print('Rx: {} | Ry: {} | Rz: {}'.format(Rx_s ,Ry_s ,Rz_s))
-    print('Vx: {} | Vy: {} | Vz: {}'.format(Vx_s ,Vy_s ,Vz_s))
-    print('-'*100)
+    print('Orbital parameters')
+    print('Semimajor axis                    = {} [km]' .format(round(sat_orbit.a/1000,3)))
+    print('Eccentricity:                     = {} [-]'  .format(round(sat_orbit.e,6)))
+    print('Inclination:                      = {} [deg]'.format(round((sat_orbit.i*180)/math.pi,1)))
+    print('Right ascension of ascending node = {} [deg]'.format(round((sat_orbit.raan*180)/math.pi,1)))
+    print('Argument of perigee               = {} [deg]'.format(round((sat_orbit.arg_pe*180)/math.pi,1)))
+    print('Mean anomaly                      = {} [deg]'.format(round((sat_orbit.M*180)/math.pi,1)))
+    print('Eccentricity anomaly              = {} [deg]'.format(round((sat_orbit.E*180)/math.pi,1)))
+    print('Period                            = {:02d}:{:02d}:{:02d} [H]'.format(int(hours), int(mins), int(secs)))
 
     # Deklaracja list dla szerokości i długości geograficznej satelity
     x_lon = []
@@ -188,6 +181,7 @@ with warnings.catch_warnings():
         # Pozycja tytułu
         title.set_y(1.01)
         # Czasy przerw pomiędzy kolejnymi krokami pętli
+        plt.tight_layout()
         plt.draw()
         plt.pause(0.25)
         time.sleep(1.0)
