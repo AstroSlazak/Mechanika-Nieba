@@ -10,7 +10,7 @@ Zapisuje w formacie excel położenie x,y,z punktów oraz ich prędkość obroto
 
 **Projekt.py, key.txt**
 
-Program do określenia parametrów dla rakiety wysłanej z danego punktu na ziemi, aby w danym czasie spotkała wybraną satelitę.(Na razie określa położenie obserwatora i satelity i rysuje trajektorię satelity)
+Satellite Tracker
 
 **Co potrzeba aby odpalić skrypt ?**
 * Połączenie z internetem
