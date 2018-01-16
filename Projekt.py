@@ -42,6 +42,7 @@ norad = {'Stacje kosmiczne':"http://www.celestrak.com/NORAD/elements/stations.tx
 
 # Wybór typu satelitów i zwrócenie adresu URL
 def sat_typ():
+    print("\n")
     # Wypisanie typów satelitów
     for i,(key, value)  in enumerate(norad.items(),1):
         print(i, key)
@@ -180,7 +181,7 @@ with warnings.catch_warnings():
         print('\n')
 
     # Określenie wielkości mapy
-    mpl.rc('figure', figsize = (12, 6))
+    mpl.rc('figure', figsize = (17, 7.5))
     # Określenie parametrów mapy
     # Wybór typu mapy, wyświetlanie, rozdzielczość mapy
     m = Basemap(projection='kav7', lon_0 = 0,
